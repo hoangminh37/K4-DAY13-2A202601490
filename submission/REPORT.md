@@ -4,7 +4,7 @@
 
 - Tên nhóm: Cá nhân (Lương Hoàng Minh)
 - Repository URL: https://github.com/hoangminh37/K4-DAY13-2A202601490
-- Commit SHA cuối: d7f6e23
+- Commit SHA cuối: 3e822a442cb1e34960ebc003e777faa6760faa54
 - Thành viên và vai trò: Lương Hoàng Minh
 
 ## 2. Kết quả kỹ thuật
@@ -23,11 +23,13 @@
 
 ## 4. Prompt versioning
 
-- Prompt name:
-- Version/label baseline:
-- Version/label candidate:
+- Prompt name: `day13-chat`
+- Version/label baseline: `production`
+- Version/label candidate: `candidate`
 - Trace ID của mỗi version:
-- Bằng chứng đổi label hoặc rollback:
+  + Trace chạy bản baseline: `req-d94fcae7`
+  + Trace chạy bản candidate: `req-878257ae`
+- Bằng chứng đổi label hoặc rollback: Đã chụp màn hình và lưu trong `submission/evidence/prompt_rollback.png`
 
 ## 5. Dashboard, SLO và alerts
 
