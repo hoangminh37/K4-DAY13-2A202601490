@@ -2,23 +2,26 @@
 
 Contract có thể kiểm tra bằng máy nằm tại `config/dashboard.yaml`. Hướng dẫn dựng và kiểm tra runtime nằm tại [DASHBOARD_SETUP.md](DASHBOARD_SETUP.md).
 
-Dashboard chính cần đủ 6 nhóm thông tin:
+Dashboard chính bao gồm 6 nhóm panel (Time range mặc định 60 phút, refresh rate 30 giây):
 
-1. Latency P50/P95/P99.
-2. Traffic: request count hoặc QPS.
-3. Error rate và breakdown theo loại lỗi.
-4. Cost theo thời gian.
-5. Tổng token input/output.
-6. Quality proxy.
-
-Tiêu chuẩn trình bày:
-
-- Khoảng thời gian mặc định: 1 giờ.
-- Tự refresh mỗi 15–30 giây nếu công cụ hỗ trợ.
-- Có threshold hoặc SLO line.
-- Ghi rõ đơn vị.
-- Chỉ giữ 6–8 panel quan trọng ở lớp chính.
-- Screenshot phải nhìn được tên panel và khoảng thời gian.
+1. **Latency**: Hiển thị độ trễ P50, P95, P99 (ms) của API.
+   - Nguồn: `latency_ms` từ `response_sent`.
+   - Threshold: P95 <= 3000ms.
+2. **Traffic**: Đếm tổng số request và tốc độ Request Per Minute (RPM).
+   - Nguồn: count event `request_received`.
+   - Threshold: RPM >= 1.
+3. **Error**: Tỷ lệ lỗi (%) và bảng breakdown nguyên nhân.
+   - Nguồn: tỷ lệ `request_failed` so với `request_received`.
+   - Threshold: error_rate_pct <= 2%.
+4. **Cost**: Chi phí LLM theo thời gian (USD).
+   - Nguồn: tổng trường `cost_usd` từ `response_sent`.
+   - Threshold: total cost <= 2.5 USD.
+5. **Tokens**: Tổng token input và output.
+   - Nguồn: tổng `tokens_in` và `tokens_out`.
+   - Threshold: tổng tokens <= 50000.
+6. **Quality**: Điểm chất lượng trung bình của hệ thống.
+   - Nguồn: trung bình `quality_score`.
+   - Threshold: avg score >= 0.75.
 
 Kiểm tra contract trước khi chụp evidence:
 
