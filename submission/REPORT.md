@@ -56,4 +56,4 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
-| | | | |
+| Lương Hoàng Minh | Hoàn thành toàn bộ các Checkpoint từ CP0 đến CP3 (Setup, PII Logging, Metrics, Traces, Dashboard, Alerts và Investigation). | Tất cả commits trên nhánh main. | Hiểu sâu về luồng Observability thực tế: từ việc gán Correlation ID, che giấu dữ liệu nhạy cảm PII, đến việc liên kết Log-Trace. Biết cách dùng Langfuse để bóc tách thời gian chạy của RAG/LLM và điều tra nguyên nhân gốc (Root Cause) dựa trên sự bất thường của Metrics. |

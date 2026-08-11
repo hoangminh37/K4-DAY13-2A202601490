@@ -8,9 +8,20 @@ from typing import Any
 import structlog
 from structlog.contextvars import merge_contextvars
 
+import json
+
 from .pii import scrub_text
 
 LOG_PATH = Path(os.getenv("LOG_PATH", "data/logs.jsonl"))
+AUDIT_LOG_PATH = Path(os.getenv("AUDIT_LOG_PATH", "data/audit.jsonl"))
+
+class AuditLogProcessor:
+    def __call__(self, logger: Any, method_name: str, event_dict: dict[str, Any]) -> dict[str, Any]:
+        if event_dict.get("event") in ("incident_enabled", "incident_disabled") or event_dict.get("service") == "control":
+            AUDIT_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+            with AUDIT_LOG_PATH.open("a", encoding="utf-8") as f:
+                f.write(json.dumps(event_dict, default=str) + "\n")
+        return event_dict
 
 
 class JsonlFileProcessor:
@@ -46,6 +57,7 @@ def configure_logging() -> None:
             scrub_event,
             structlog.processors.StackInfoRenderer(),
             structlog.processors.format_exc_info,
+            AuditLogProcessor(),
             JsonlFileProcessor(),
             structlog.processors.JSONRenderer(),
         ],
