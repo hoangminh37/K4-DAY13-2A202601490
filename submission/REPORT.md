@@ -42,13 +42,13 @@
 
 ## 6. Điều tra challenge
 
-- Challenge ID:
-- Triệu chứng từ metrics:
-- Trace ID liên quan:
-- Log line/correlation ID liên quan:
-- Root cause:
-- Fix action:
-- Preventive measure:
+- Challenge ID: day13-k4-observability-v1
+- Triệu chứng từ metrics: Điểm p95 latency tăng vọt lên ~3635ms, vượt quá ngưỡng SLO cho phép (< 3000ms), trong khi đó traffic và error rate vẫn giữ ở mức bình thường.
+- Trace ID liên quan: Bất kỳ Trace nào trong đợt tải có kèm tag `monitoring` (ví dụ chứa Correlation ID: `req-d94fcae7`).
+- Log line/correlation ID liên quan: Dùng Correlation ID `req-d94fcae7` để lọc file `data/logs.jsonl`. Kết quả cho thấy thời gian từ lúc `request_received` đến lúc `response_sent` kéo dài hơn 3.5 giây.
+- Root cause: Bằng chứng từ biểu đồ Trace Waterfall trên Langfuse chỉ ra rõ ràng sub-span `retrieve` (đại diện cho bước lấy context từ RAG / Vector DB) đã tiêu tốn thêm tận 2.5 giây so với bình thường. Nguyên nhân gốc nằm ở hệ thống Retrieval (do Vector DB chậm hoặc timeout).
+- Fix action: Tạm thời vô hiệu hóa tính năng RAG hoặc kích hoạt bản RAG cache/dự phòng để khôi phục tốc độ dịch vụ ngay lập tức. Sau đó scale tài nguyên của Vector Store.
+- Preventive measure: Cần thiết lập Alert Rule riêng biệt cho độ trễ của RAG (ví dụ: retrieve span > 1s). Bổ sung timeout cứng vào code RAG để không làm treo toàn bộ API (ví dụ nếu quá 500ms không lấy được docs thì trả về list rỗng thay vì chờ đợi).
 
 ## 7. Đóng góp cá nhân
 
